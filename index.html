@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Last Human Message</title>
+<meta name="theme-color" content="#050a0b">
+<script type="module">
+import { createClient } from
+'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+const supabase = createClient(
+  'https://vkzhlrtcyglkqmseuvkv.supabase.co',
+  'sb_publishable_z2Ua_8qQw_BXAkB7cp7eow_TS7Mlbt9'
+);
+
+const list = document.getElementById('messages');
+const count = document.getElementById('count');
+const form = document.getElementById('messageForm');
+const status = document.getElementById('status');
+
+async function loadMessages() {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('id, content, display_name, country, created_at')
+    .order('created_at', { ascending: false })
+    .limit(100);
+
+  if (error) {
+    status.textContent = 'Messages could not be loaded.';
+    return;
+  }
+
+  list.replaceChildren();
+  count.textContent = data.length.toLocaleString();
+
+  data.forEach(message => {
+    const card = document.createElement('article');
+    card.className = 'message';
+
+    const content = document.createElement('p');
+    content.textContent = message.content;
+
+    const author = document.createElement('small');
+    author.textContent =
+      `${message.display_name || 'Anonymous'} · ${message.country || 'Earth'}`;
+
+    card.append(content, author);
+    list.append(card);
+  });
+}
+
+form.addEventListener('submit', async event => {
+  event.preventDefault();
+
+  const content = document.getElementById('content').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const country = document.getElementById('country').value.trim();
+
+  if (!content || content.length > 200) return;
+
+  const submit = form.querySelector('button');
+  submit.disabled = true;
+  status.textContent = 'Sending your message...';
+
+  const { error } = await supabase.from('messages').insert({
+    content,
+    display_name: name || 'Anonymous',
+    country: country || 'Earth'
+  });
+
+  submit.disabled = false;
+
+  if (error) {
+    status.textContent = 'Could not send. Please try again.';
+    return;
+  }
+
+  form.reset();
+  status.textContent = 'Your message has reached humanity.';
+  await loadMessages();
+});
+
+await loadMessages();
+
+supabase
+  .channel('public-messages')
+  .on('postgres_changes', {
+    event: '*',
+    schema: 'public',
+    table: 'messages'
+  }, loadMessages)
+  .subscribe();
+</script>
+
+<style>
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  background: #05090b;
+  color: #f4f7f5;
+  font-family: Arial, sans-serif;
+}
+.hero {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 50px 20px;
+  overflow: hidden;
+  position: relative;
+  background:
+    radial-gradient(ellipse at 50% 100%, #123c35 0%, #071412 35%, #05090b 72%);
+}
+.stars {
+  position: absolute;
+  inset: 0;
+  opacity: .5;
+  background-image:
+    radial-gradient(1px 1px at 20% 20%, white 99%, transparent),
+    radial-gradient(2px 2px at 70% 30%, white 99%, transparent),
+    radial-gradient(1px 1px at 40% 60%, white 99%, transparent),
+    radial-gradient(1px 1px at 85% 75%, white 99%, transparent);
+  background-size: 180px 180px;
+}
+.earth {
+  width: min(78vw, 390px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  position: relative;
+  margin: 20px auto 34px;
+  background:
+    radial-gradient(ellipse at 32% 30%, #75bba2 0%, transparent 20%),
+    radial-gradient(ellipse at 65% 60%, #1e7665 0%, transparent 28%),
+    radial-gradient(ellipse at 35% 70%, #276e61 0%, transparent 23%),
+    radial-gradient(circle at 35% 30%, #318c80, #103c42 50%, #030b13 76%);
+  box-shadow:
+    inset -35px -20px 65px #000c,
+    inset 12px 8px 35px #8bffe455,
+    0 0 35px #35e5a555,
+    0 0 100px #1a9c7955;
+}
+.earth:before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid #69e8bd88;
+  filter: blur(5px);
+}
+.earth:after {
+  content: "";
+  position: absolute;
+  inset: 12%;
+  border-radius: 50%;
+  background:
+    radial-gradient(ellipse at 30% 30%, #a5d5a955 0 7%, transparent 8%),
+    radial-gradient(ellipse at 70% 55%, #9acb9a44 0 10%, transparent 11%),
+    radial-gradient(ellipse at 45% 75%, #9acb9a44 0 8%, transparent 9%);
+  filter: blur(8px);
+}
+.eyebrow {
+  color: #72e5b6;
+  letter-spacing: 5px;
+  font-size: 11px;
+  position: relative;
+}
+h1 {
+  font-size: clamp(34px, 8vw, 66px);
+  line-height: 1.05;
+  letter-spacing: 2px;
+  max-width: 850px;
+  margin: 10px 0;
+  position: relative;
+}
+.subtitle {
+  color: #a6b8b1;
+  max-width: 440px;
+  line-height: 1.7;
+  position: relative;
+}
+button {
+  background: #69e5ae;
+  color: #03100b;
+  border: 0;
+  border-radius: 4px;
+  padding: 16px 28px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  cursor: pointer;
+}
+button:disabled { opacity: .5; }
+.hero button { margin-top: 22px; position: relative; }
+section {
+  max-width: 850px;
+  margin: auto;
+  padding: 75px 20px;
+}
+.section-title {
+  text-align: center;
+  font-size: 27px;
+  letter-spacing: 2px;
+}
+.counter {
+  text-align: center;
+  color: #70e5b4;
+  font-size: 14px;
+  margin: 15px 0 35px;
+}
+form {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 35px;
+}
+input, textarea {
+  width: 100%;
+  background: #101a19;
+  color: white;
+  border: 1px solid #263c35;
+  border-radius: 5px;
+  padding: 15px;
+  font: inherit;
+}
+textarea { min-height: 110px; resize: vertical; }
+form button { width: 100%; }
+#status {
+  color: #70e5b4;
+  text-align: center;
+  min-height: 20px;
+  font-size: 13px;
+}
+.message {
+  background: #0d1716;
+  border: 1px solid #20332d;
+  border-radius: 7px;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+.message p {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+.message small { color: #70b99c; }
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #65766f;
+  font-size: 12px;
+}
+</style>
+</head>
+
+<body>
+<header class="hero">
+  <div class="stars"></div>
+  <div class="eyebrow">ONE PLANET · ONE HUMANITY</div>
+  <div class="earth"></div>
+  <h1>THE LAST<br>HUMAN MESSAGE</h1>
+  <p class="subtitle">
+    If humanity could leave one message behind,
+    what would you want the world to remember?
+  </p>
+  <button onclick="document.getElementById('wall').scrollIntoView()">
+    LEAVE YOUR MESSAGE
+  </button>
+</header>
+
+<section id="wall">
+  <h2 class="section-title">MESSAGES TO HUMANITY</h2>
+  <div class="counter"><span id="count">0</span> MESSAGES LEFT</div>
+
+  <form id="messageForm">
+    <textarea id="content" maxlength="200"
+      placeholder="Write something humanity should remember..."
+      required></textarea>
+    <input id="name" maxlength="24" placeholder="Your name (optional)">
+    <input id="country" maxlength="60" placeholder="Your country (optional)">
+    <button type="submit">SEND YOUR MESSAGE</button>
+    <div id="status"></div>
+  </form>
+
+  <div id="messages"></div>
+</section>
+
+<footer>ONE WORLD. BILLIONS OF STORIES. ONE HUMANITY.</footer>
+</body>
+</html>
