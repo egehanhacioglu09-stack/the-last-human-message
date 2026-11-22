@@ -1,292 +1,250 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#030609">
 <title>The Last Human Message</title>
-<meta name="theme-color" content="#050a0b">
-<script type="module">
-import { createClient } from
-'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
-const supabase = createClient(
-  'https://vkzhlrtcyglkqmseuvkv.supabase.co',
-  'sb_publishable_z2Ua_8qQw_BXAkB7cp7eow_TS7Mlbt9'
-);
-
-const list = document.getElementById('messages');
-const count = document.getElementById('count');
-const form = document.getElementById('messageForm');
-const status = document.getElementById('status');
-
-async function loadMessages() {
-  const { data, error } = await supabase
-    .from('messages')
-    .select('id, content, display_name, country, created_at')
-    .order('created_at', { ascending: false })
-    .limit(100);
-
-  if (error) {
-    status.textContent = 'Messages could not be loaded.';
-    return;
-  }
-
-  list.replaceChildren();
-  count.textContent = data.length.toLocaleString();
-
-  data.forEach(message => {
-    const card = document.createElement('article');
-    card.className = 'message';
-
-    const content = document.createElement('p');
-    content.textContent = message.content;
-
-    const author = document.createElement('small');
-    author.textContent =
-      `${message.display_name || 'Anonymous'} · ${message.country || 'Earth'}`;
-
-    card.append(content, author);
-    list.append(card);
-  });
-}
-
-form.addEventListener('submit', async event => {
-  event.preventDefault();
-
-  const content = document.getElementById('content').value.trim();
-  const name = document.getElementById('name').value.trim();
-  const country = document.getElementById('country').value.trim();
-
-  if (!content || content.length > 200) return;
-
-  const submit = form.querySelector('button');
-  submit.disabled = true;
-  status.textContent = 'Sending your message...';
-
-  const { error } = await supabase.from('messages').insert({
-    content,
-    display_name: name || 'Anonymous',
-    country: country || 'Earth'
-  });
-
-  submit.disabled = false;
-
-  if (error) {
-    status.textContent = 'Could not send. Please try again.';
-    return;
-  }
-
-  form.reset();
-  status.textContent = 'Your message has reached humanity.';
-  await loadMessages();
-});
-
-await loadMessages();
-
-supabase
-  .channel('public-messages')
-  .on('postgres_changes', {
-    event: '*',
-    schema: 'public',
-    table: 'messages'
-  }, loadMessages)
-  .subscribe();
-</script>
-
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-* { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
-body {
-  margin: 0;
-  background: #05090b;
-  color: #f4f7f5;
-  font-family: Arial, sans-serif;
-}
-.hero {
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 50px 20px;
-  overflow: hidden;
-  position: relative;
-  background:
-    radial-gradient(ellipse at 50% 100%, #123c35 0%, #071412 35%, #05090b 72%);
-}
-.stars {
-  position: absolute;
-  inset: 0;
-  opacity: .5;
-  background-image:
-    radial-gradient(1px 1px at 20% 20%, white 99%, transparent),
-    radial-gradient(2px 2px at 70% 30%, white 99%, transparent),
-    radial-gradient(1px 1px at 40% 60%, white 99%, transparent),
-    radial-gradient(1px 1px at 85% 75%, white 99%, transparent);
-  background-size: 180px 180px;
-}
-.earth {
-  width: min(78vw, 390px);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  position: relative;
-  margin: 20px auto 34px;
-  background:
-    radial-gradient(ellipse at 32% 30%, #75bba2 0%, transparent 20%),
-    radial-gradient(ellipse at 65% 60%, #1e7665 0%, transparent 28%),
-    radial-gradient(ellipse at 35% 70%, #276e61 0%, transparent 23%),
-    radial-gradient(circle at 35% 30%, #318c80, #103c42 50%, #030b13 76%);
-  box-shadow:
-    inset -35px -20px 65px #000c,
-    inset 12px 8px 35px #8bffe455,
-    0 0 35px #35e5a555,
-    0 0 100px #1a9c7955;
-}
-.earth:before {
-  content: "";
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 2px solid #69e8bd88;
-  filter: blur(5px);
-}
-.earth:after {
-  content: "";
-  position: absolute;
-  inset: 12%;
-  border-radius: 50%;
-  background:
-    radial-gradient(ellipse at 30% 30%, #a5d5a955 0 7%, transparent 8%),
-    radial-gradient(ellipse at 70% 55%, #9acb9a44 0 10%, transparent 11%),
-    radial-gradient(ellipse at 45% 75%, #9acb9a44 0 8%, transparent 9%);
-  filter: blur(8px);
-}
-.eyebrow {
-  color: #72e5b6;
-  letter-spacing: 5px;
-  font-size: 11px;
-  position: relative;
-}
-h1 {
-  font-size: clamp(34px, 8vw, 66px);
-  line-height: 1.05;
-  letter-spacing: 2px;
-  max-width: 850px;
-  margin: 10px 0;
-  position: relative;
-}
-.subtitle {
-  color: #a6b8b1;
-  max-width: 440px;
-  line-height: 1.7;
-  position: relative;
-}
-button {
-  background: #69e5ae;
-  color: #03100b;
-  border: 0;
-  border-radius: 4px;
-  padding: 16px 28px;
-  font-weight: bold;
-  letter-spacing: 2px;
-  cursor: pointer;
-}
-button:disabled { opacity: .5; }
-.hero button { margin-top: 22px; position: relative; }
-section {
-  max-width: 850px;
-  margin: auto;
-  padding: 75px 20px;
-}
-.section-title {
-  text-align: center;
-  font-size: 27px;
-  letter-spacing: 2px;
-}
-.counter {
-  text-align: center;
-  color: #70e5b4;
-  font-size: 14px;
-  margin: 15px 0 35px;
-}
-form {
-  display: grid;
-  gap: 12px;
-  margin-bottom: 35px;
-}
-input, textarea {
-  width: 100%;
-  background: #101a19;
-  color: white;
-  border: 1px solid #263c35;
-  border-radius: 5px;
-  padding: 15px;
-  font: inherit;
-}
-textarea { min-height: 110px; resize: vertical; }
-form button { width: 100%; }
-#status {
-  color: #70e5b4;
-  text-align: center;
-  min-height: 20px;
-  font-size: 13px;
-}
-.message {
-  background: #0d1716;
-  border: 1px solid #20332d;
-  border-radius: 7px;
-  padding: 20px;
-  margin-bottom: 12px;
-}
-.message p {
-  line-height: 1.6;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
-}
-.message small { color: #70b99c; }
-footer {
-  text-align: center;
-  padding: 30px;
-  color: #65766f;
-  font-size: 12px;
+:root{--green:#9af5c5;--muted:#9ba9a5;--bg:#030609;--line:#ffffff20}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:#f4f8f6;font-family:"DM Sans",sans-serif}
+a{color:inherit;text-decoration:none}
+button,input,textarea{font:inherit}
+header{height:82px;position:absolute;z-index:5;top:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 7%;border-bottom:1px solid #ffffff18}
+.logo{font:800 12px Manrope;letter-spacing:2px;display:flex;gap:12px;align-items:center}
+.logo i{width:25px;height:25px;border:1px solid var(--green);border-radius:50%;display:block;box-shadow:0 0 18px #9af5c555}
+nav{display:flex;gap:30px;align-items:center;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#d4dfdc}
+nav a:hover{color:var(--green)}
+.nav-button{border:1px solid #9af5c577;padding:12px 17px;color:var(--green)}
+.hero{min-height:850px;height:100svh;max-height:1100px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#020508 url("https://images-assets.nasa.gov/image/iss072e030246/iss072e030246~large.jpg") center 45%/cover no-repeat}
+.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#020609a8 0%,#02060955 40%,#020609aa 78%,#030609 100%)}
+.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 5%,#02060955 90%)}
+.hero-content{position:relative;z-index:2;max-width:900px;padding:120px 24px 65px}
+.eyebrow{color:var(--green);font-size:10px;letter-spacing:5px;text-transform:uppercase}
+h1{font:500 clamp(45px,8vw,100px)/.98 Manrope;letter-spacing:-.065em;text-transform:uppercase;margin:28px 0 20px;text-shadow:0 4px 35px #000}
+h1 span{display:block;color:#c9f5df}
+.hero p{max-width:530px;margin:0 auto;color:#d2ddda;font-size:15px;line-height:1.9;text-shadow:0 2px 12px #000}
+.actions{display:flex;justify-content:center;gap:15px;margin-top:35px;flex-wrap:wrap}
+.btn{border:1px solid var(--green);background:var(--green);color:#06110c;padding:16px 23px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
+.btn-outline{background:#07110d80;color:var(--green)}
+.hero-bottom{position:absolute;z-index:2;bottom:30px;left:7%;right:7%;display:flex;justify-content:space-between;color:#d0ded7;font-size:9px;letter-spacing:2px;text-transform:uppercase}
+.section{max-width:1120px;margin:auto;padding:105px 24px}
+.section-head{text-align:center;margin-bottom:45px}
+.label{font-size:10px;color:var(--green);letter-spacing:4px;text-transform:uppercase}
+h2{font:500 clamp(32px,5vw,52px) Manrope;letter-spacing:-.045em;margin:14px 0}
+.intro{color:var(--muted);font-size:14px;line-height:1.8;max-width:520px;margin:auto}
+.message-panel{max-width:760px;margin:auto;background:linear-gradient(145deg,#101a20,#080d12);border:1px solid var(--line);padding:30px}
+.message-panel h3{font:600 18px Manrope;margin:0 0 9px}
+.message-panel p{font-size:12px;color:var(--muted);line-height:1.7}
+textarea,input{width:100%;padding:15px;background:#050a0e;border:1px solid #ffffff25;color:white;outline:none;border-radius:2px;margin-top:10px}
+textarea{height:130px;resize:vertical}
+textarea:focus,input:focus{border-color:var(--green)}
+.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.send-row{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:16px}
+.small{font-size:10px;color:#82928d;letter-spacing:1px}
+#status,#authStatus{font-size:12px;color:var(--green);min-height:18px}
+.feed{max-width:760px;margin:40px auto 0}
+.feed-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:15px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
+#count{color:var(--green)}
+.message{padding:23px;margin-bottom:12px;background:#0a1117;border:1px solid #ffffff15}
+.message p{font:400 15px/1.8 Manrope;overflow-wrap:anywhere}
+.meta{display:flex;justify-content:space-between;color:#91a39a;font-size:10px;text-transform:uppercase;letter-spacing:1px}
+.account-section{padding:110px 24px;background:linear-gradient(180deg,#050a0e,#0b1717 55%,#050a0e);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.account-box{max-width:500px;margin:40px auto 0;padding:35px;background:#08110f;border:1px solid #9af5c544;text-align:center}
+.account-box h3{font:600 23px Manrope;margin:0 0 10px}
+.account-box p{font-size:13px;color:var(--muted);line-height:1.7}
+.account-box input{margin:8px 0}
+.account-box button{width:100%;margin-top:12px}
+.secondary{background:transparent;color:var(--green);border:1px solid #9af5c566;padding:14px;cursor:pointer;font-size:10px;letter-spacing:1.5px;text-transform:uppercase}
+#authUser{color:var(--green);overflow-wrap:anywhere}
+.closing{text-align:center;padding:90px 20px;background:radial-gradient(ellipse at center,#10251e,#030609 70%)}
+.closing p{font:500 clamp(25px,4vw,40px) Manrope;max-width:700px;margin:0 auto 25px}
+.closing span{color:var(--green)}
+footer{padding:28px 7%;display:flex;justify-content:space-between;gap:20px;color:#80918a;font-size:9px;letter-spacing:1.5px}
+[hidden]{display:none!important}
+@media(max-width:700px){
+ header{height:70px;padding:0 18px}
+ .logo{font-size:9px;letter-spacing:1px}
+ nav{gap:12px}nav a:first-child{display:none}
+ .nav-button{padding:10px;font-size:9px}
+ .hero{min-height:790px;background-position:56% center}
+ .hero-content{padding-top:110px}
+ h1{font-size:clamp(43px,12vw,65px)}
+ .hero p{font-size:13px}
+ .hero-bottom{left:18px;right:18px;font-size:8px;letter-spacing:1px}
+ .section{padding:80px 18px}
+ .message-panel{padding:20px}
+ .fields{grid-template-columns:1fr;gap:0}
+ .send-row{align-items:flex-start;flex-direction:column}
+ .account-box{padding:25px 19px}
+ footer{flex-direction:column;text-align:center;line-height:1.8}
 }
 </style>
 </head>
-
 <body>
-<header class="hero">
-  <div class="stars"></div>
-  <div class="eyebrow">ONE PLANET · ONE HUMANITY</div>
-  <div class="earth"></div>
-  <h1>THE LAST<br>HUMAN MESSAGE</h1>
-  <p class="subtitle">
-    If humanity could leave one message behind,
-    what would you want the world to remember?
-  </p>
-  <button onclick="document.getElementById('wall').scrollIntoView()">
-    LEAVE YOUR MESSAGE
-  </button>
+
+<header>
+ <a class="logo" href="#"><i></i> THE LAST HUMAN MESSAGE</a>
+ <nav>
+  <a href="#wall">The Wall</a>
+  <a href="#account" class="nav-button">Sign in / Join</a>
+ </nav>
 </header>
 
-<section id="wall">
-  <h2 class="section-title">MESSAGES TO HUMANITY</h2>
-  <div class="counter"><span id="count">0</span> MESSAGES LEFT</div>
-
-  <form id="messageForm">
-    <textarea id="content" maxlength="200"
-      placeholder="Write something humanity should remember..."
-      required></textarea>
-    <input id="name" maxlength="24" placeholder="Your name (optional)">
-    <input id="country" maxlength="60" placeholder="Your country (optional)">
-    <button type="submit">SEND YOUR MESSAGE</button>
-    <div id="status"></div>
-  </form>
-
-  <div id="messages"></div>
+<main>
+<section class="hero">
+ <div class="hero-content">
+  <div class="eyebrow">One planet. One humanity.</div>
+  <h1>The Last <span>Human Message</span></h1>
+  <p>If humanity could leave one message behind, what would you want the universe to remember?</p>
+  <div class="actions">
+   <button class="btn" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Leave your message ↗</button>
+   <button class="btn btn-outline" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Explore the wall ↓</button>
+  </div>
+ </div>
+ <div class="hero-bottom">
+  <span><b id="count">0</b> messages left</span>
+  <span>A voice from Earth</span>
+ </div>
 </section>
 
-<footer>ONE WORLD. BILLIONS OF STORIES. ONE HUMANITY.</footer>
+<section class="section" id="wall">
+ <div class="section-head">
+  <div class="label">The human archive</div>
+  <h2>Words that outlive us.</h2>
+  <p class="intro">Every human has something worth leaving behind. A memory, a truth, a message to the future.</p>
+ </div>
+
+ <div class="message-panel">
+  <h3>Leave a message for humanity.</h3>
+  <p>Write something you wish the world would never forget.</p>
+  <form id="messageForm">
+   <textarea id="content" maxlength="200" placeholder="If the world could hear one thing from you..." required></textarea>
+   <div class="fields">
+    <input id="name" maxlength="24" placeholder="Your name (optional)">
+    <input id="country" maxlength="60" placeholder="Your country (optional)">
+   </div>
+   <div class="send-row">
+    <span class="small">UP TO 200 CHARACTERS</span>
+    <button class="btn" id="sendButton" type="submit">Publish message ↗</button>
+   </div>
+   <div id="status"></div>
+  </form>
+ </div>
+
+ <div class="feed">
+  <div class="feed-head"><span>Messages from Earth</span><span>LIVE ARCHIVE</span></div>
+  <div id="messages"></div>
+ </div>
+</section>
+
+<section class="account-section" id="account">
+ <div class="section-head">
+  <div class="label">Your identity</div>
+  <h2>Become part of the story.</h2>
+  <p class="intro">Create your account or sign in to return to your place in the human archive.</p>
+ </div>
+ <div class="account-box">
+  <h3>Welcome to humanity.</h3>
+  <p id="authUser">You are currently browsing anonymously.</p>
+  <input id="email" type="email" autocomplete="email" placeholder="Email address">
+  <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Password">
+  <button class="btn" id="signIn" type="button">Sign in to your account</button>
+  <button class="secondary" id="signUp" type="button">Create a new account</button>
+  <button class="secondary" id="signOut" type="button" hidden>Sign out</button>
+  <div id="authStatus"></div>
+ </div>
+</section>
+
+<section class="closing">
+ <p>We are temporary. <span>What we leave behind can remain.</span></p>
+ <button class="btn" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Leave your message ↗</button>
+</section>
+</main>
+
+<footer>
+ <span>© THE LAST HUMAN MESSAGE</span>
+ <span>ONE WORLD. BILLIONS OF STORIES.</span>
+</footer>
+
+<script type="module">
+import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+const supabase=createClient('https://vkzhlrtcyglkqmseuvkv.supabase.co','sb_publishable_z2Ua_8qQw_BXAkB7cp7eow_TS7Mlbt9');
+const $=id=>document.getElementById(id);
+
+async function refreshAuth(){
+ const {data:{user}}=await supabase.auth.getUser();
+ $('authUser').textContent=user?user.email:'You are currently browsing anonymously.';
+ $('signOut').hidden=!user;
+ $('signIn').hidden=!!user;
+ $('signUp').hidden=!!user;
+}
+$('signIn').onclick=async()=>{
+ $('authStatus').textContent='Signing in...';
+ const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
+ $('authStatus').textContent=error?error.message:'Welcome back.';
+ await refreshAuth();
+};
+$('signUp').onclick=async()=>{
+ $('authStatus').textContent='Creating account...';
+ const {data,error}=await supabase.auth.signUp({email:$('email').value.trim(),password:$('password').value});
+ $('authStatus').textContent=error?error.message:(data.session?'Your account is ready.':'Check your inbox to confirm your email.');
+ await refreshAuth();
+};
+$('signOut').onclick=async()=>{
+ const {error}=await supabase.auth.signOut();
+ $('authStatus').textContent=error?error.message:'You are signed out.';
+ await refreshAuth();
+};
+supabase.auth.onAuthStateChange(()=>refreshAuth());
+await refreshAuth();
+
+async function loadMessages(){
+ const {data,error}=await supabase.from('messages').select('id,content,display_name,country,created_at').order('created_at',{ascending:false}).limit(100);
+ if(error){$('status').textContent='Messages could not be loaded.';return;}
+ $('messages').replaceChildren();
+ $('count').textContent=data.length.toLocaleString();
+ if(!data.length){
+  const empty=document.createElement('p');
+  empty.textContent='The archive is waiting for its first message.';
+  empty.className='intro';
+  $('messages').append(empty);
+  return;
+ }
+ data.forEach(m=>{
+  const card=document.createElement('article');card.className='message';
+  const p=document.createElement('p');p.textContent=m.content;
+  const meta=document.createElement('div');meta.className='meta';
+  const author=document.createElement('span');author.textContent=m.display_name||'Anonymous';
+  const country=document.createElement('span');country.textContent=m.country||'Earth';
+  meta.append(author,country);card.append(p,meta);$('messages').append(card);
+ });
+}
+$('messageForm').addEventListener('submit',async e=>{
+ e.preventDefault();
+ const content=$('content').value.trim();
+ if(!content||content.length>200)return;
+ $('sendButton').disabled=true;
+ $('status').textContent='Sending your message...';
+ const {error}=await supabase.from('messages').insert({
+  content,
+  display_name:$('name').value.trim()||'Anonymous',
+  country:$('country').value.trim()||'Earth'
+ });
+ $('sendButton').disabled=false;
+ if(error){$('status').textContent='Could not send your message. Please try again.';return;}
+ $('messageForm').reset();
+ $('status').textContent='Your message has reached humanity.';
+ await loadMessages();
+});
+await loadMessages();
+supabase.channel('public-messages').on('postgres_changes',{event:'*',schema:'public',table:'messages'},loadMessages).subscribe();
+</script>
 </body>
 </html>
