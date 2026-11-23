@@ -316,6 +316,41 @@
       overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
+    .message-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 14px;
+  padding-top: 11px;
+  border-top: 1px solid rgba(255,255,255,.07);
+}
+
+.like-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 11px;
+  color: #a9b9cb;
+  background: rgba(255,255,255,.035);
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 20px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.like-button:hover,
+.like-button.liked {
+  color: #ff8eaa;
+  border-color: rgba(255,142,170,.35);
+  background: rgba(255,142,170,.09);
+}
+
+.like-button:disabled {
+  opacity: .55;
+  cursor: wait;
+}
+    
 
     .empty-state {
       text-align: center;
