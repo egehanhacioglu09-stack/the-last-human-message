@@ -936,6 +936,7 @@
         `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`.toUpperCase();
 
       $("profileAvatar").textContent = initials;
+      loadMyActivity();
       $("loggedOutMessage").classList.add("hidden");
       $("messageForm").classList.remove("hidden");
     }
