@@ -1236,19 +1236,79 @@
     }
 
     async function loadMessages() {
-      const { data, error } = await db
-        .from("messages")
-        .select("id, content, display_name, country, created_at")
-        .order("created_at", { ascending: false })
-        .limit(50);
+      async function loadMessages() {
+  const { data, error } = await db
+    .from("messages")
+    .select("id, content, display_name, country, created_at, likes")
+    .order("created_at", { ascending: false })
+    .limit(50);
 
-      if (error) {
-        $("messageList").innerHTML = `
-          <div class="empty-state">Messages couldn't be loaded right now. Please refresh the page.</div>
-        `;
-        console.error("Messages error:", error);
-        return;
-      }
+  if (error) {
+    $("messageList").innerHTML = `
+      <div class="empty-state">Messages couldn't be loaded right now. Please refresh the page.</div>
+    `;
+    console.error("Messages error:", error);
+    return;
+  }
+
+  let likedIds = new Set();
+
+  if (currentUser) {
+    const { data: likedMessages, error: likesError } = await db
+      .from("message_likes")
+      .select("message_id")
+      .eq("user_id", currentUser.id);
+
+    if (likesError) {
+      console.error("Likes loading error:", likesError);
+    } else {
+      likedIds = new Set(
+        (likedMessages || []).map(item => item.message_id)
+      );
+    }
+  }
+
+  const messages = (data || []).map(message => ({
+    ...message,
+    liked: likedIds.has(message.id)
+  }));
+
+  renderMessages(messages);
+}
+$("messageList").addEventListener("click", async (event) => {
+  const button = event.target.closest("[data-like-button]");
+  if (!button) return;
+
+  if (!currentUser) {
+    setStatus("wallStatus", "Sign in to like messages.", true);
+    return;
+  }
+
+  const messageId = button.dataset.messageId;
+  const wasLiked = button.dataset.liked === "true";
+
+  button.disabled = true;
+
+  const result = wasLiked
+    ? await db.from("message_likes")
+        .delete()
+        .eq("message_id", messageId)
+        .eq("user_id", currentUser.id)
+    : await db.from("message_likes")
+        .insert({
+          message_id: messageId,
+          user_id: currentUser.id
+        });
+
+  if (result.error) {
+    console.error("Like error:", result.error);
+    setStatus("wallStatus", "Like couldn't be saved. Please try again.", true);
+  } else {
+    setStatus("wallStatus", "");
+  }
+
+  await loadMessages();
+});
 
       renderMessages(data || []);
     }
