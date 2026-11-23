@@ -1294,6 +1294,7 @@ async function loadMyActivity() {
       $("charCount").textContent = "0";
       setStatus("messageStatus", "Your message has been sent to the wall.");
       await loadMessages();
+      await loadMyActivity();
     });
 
     function formatDate(value) {
