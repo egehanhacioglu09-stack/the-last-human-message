@@ -918,7 +918,52 @@
       $("loggedOutMessage").classList.remove("hidden");
       $("messageForm").classList.add("hidden");
     }
+async function loadMyActivity() {
+  if (!currentUser) return;
 
+  const { data, error } = await db
+    .from("messages")
+    .select("id, content, likes, created_at")
+    .eq("user_id", currentUser.id)
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    console.error("Activity error:", error);
+    $("myMessages").textContent = "Activity couldn't be loaded.";
+    return;
+  }
+
+  const messages = data || [];
+
+  $("myMessageCount").textContent = messages.length;
+
+  const totalLikes = messages.reduce(
+    (total, message) => total + Number(message.likes || 0),
+    0
+  );
+
+  $("myLikeCount").textContent = totalLikes;
+
+  if (messages.length === 0) {
+    $("myMessages").innerHTML =
+      '<p class="account-note">You haven’t published any messages yet.</p>';
+    return;
+  }
+
+  $("myMessages").innerHTML = messages.map(message => `
+    <div class="message-card">
+      <div class="message-date">
+        ${escapeHTML(formatDate(message.created_at))}
+      </div>
+      <div class="message-content">
+        ${escapeHTML(message.content)}
+      </div>
+      <div class="message-author">
+        ♥ ${Number(message.likes || 0)} likes
+      </div>
+    </div>
+  `).join("");
+}
     function showProfile(profile, user) {
       $("authArea").classList.add("hidden");
       $("completeProfileForm").classList.add("hidden");
