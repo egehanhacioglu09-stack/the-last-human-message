@@ -1218,7 +1218,20 @@
           </div>
           <div class="message-country">${escapeHTML(message.country || "🌍 Earth")}</div>
           <div class="message-content">${escapeHTML(message.content)}</div>
-        </article>
+          <div class="message-actions">
+  <button
+    class="like-button ${message.liked ? "liked" : ""}"
+    type="button"
+    data-like-button
+    data-message-id="${escapeHTML(message.id)}"
+    data-liked="${message.liked ? "true" : "false"}"
+    aria-pressed="${message.liked ? "true" : "false"}"
+  >
+    <span>${message.liked ? "♥" : "♡"}</span>
+    <span>${Number(message.likes || 0)}</span>
+  </button>
+</div>
+        </article> 
       `).join("");
     }
 
