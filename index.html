@@ -1434,13 +1434,19 @@ $("messageList").addEventListener("click", async (event) => {
 
     loadMessages();
 
-    // Live updates when a new message is published.
-    db.channel("public-message-wall")
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages" },
-        () => loadMessages()
-      )
+    // Live updates for messages and likes.
+db.channel("public-message-wall")
+  .on(
+    "postgres_changes",
+    { event: "INSERT", schema: "public", table: "messages" },
+    () => loadMessages()
+  )
+  .on(
+    "postgres_changes",
+    { event: "UPDATE", schema: "public", table: "messages" },
+    () => loadMessages()
+  )
+  .subscribe();
       .subscribe();
 
     // Restore the current login state.
