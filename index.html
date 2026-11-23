@@ -1446,7 +1446,6 @@ db.channel("public-message-wall")
     { event: "UPDATE", schema: "public", table: "messages" },
     () => loadMessages()
   )
-  .subscribe();
       .subscribe();
 
     // Restore the current login state.
