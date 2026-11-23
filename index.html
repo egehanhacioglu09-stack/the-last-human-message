@@ -1,250 +1,1240 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#030609">
-<title>The Last Human Message</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root{--green:#9af5c5;--muted:#9ba9a5;--bg:#030609;--line:#ffffff20}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:#f4f8f6;font-family:"DM Sans",sans-serif}
-a{color:inherit;text-decoration:none}
-button,input,textarea{font:inherit}
-header{height:82px;position:absolute;z-index:5;top:0;width:100%;display:flex;align-items:center;justify-content:space-between;padding:0 7%;border-bottom:1px solid #ffffff18}
-.logo{font:800 12px Manrope;letter-spacing:2px;display:flex;gap:12px;align-items:center}
-.logo i{width:25px;height:25px;border:1px solid var(--green);border-radius:50%;display:block;box-shadow:0 0 18px #9af5c555}
-nav{display:flex;gap:30px;align-items:center;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;color:#d4dfdc}
-nav a:hover{color:var(--green)}
-.nav-button{border:1px solid #9af5c577;padding:12px 17px;color:var(--green)}
-.hero{min-height:850px;height:100svh;max-height:1100px;position:relative;display:flex;align-items:center;justify-content:center;text-align:center;overflow:hidden;background:#020508 url("https://images-assets.nasa.gov/image/iss072e030246/iss072e030246~large.jpg") center 45%/cover no-repeat}
-.hero:before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#020609a8 0%,#02060955 40%,#020609aa 78%,#030609 100%)}
-.hero:after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 55%,transparent 5%,#02060955 90%)}
-.hero-content{position:relative;z-index:2;max-width:900px;padding:120px 24px 65px}
-.eyebrow{color:var(--green);font-size:10px;letter-spacing:5px;text-transform:uppercase}
-h1{font:500 clamp(45px,8vw,100px)/.98 Manrope;letter-spacing:-.065em;text-transform:uppercase;margin:28px 0 20px;text-shadow:0 4px 35px #000}
-h1 span{display:block;color:#c9f5df}
-.hero p{max-width:530px;margin:0 auto;color:#d2ddda;font-size:15px;line-height:1.9;text-shadow:0 2px 12px #000}
-.actions{display:flex;justify-content:center;gap:15px;margin-top:35px;flex-wrap:wrap}
-.btn{border:1px solid var(--green);background:var(--green);color:#06110c;padding:16px 23px;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer}
-.btn-outline{background:#07110d80;color:var(--green)}
-.hero-bottom{position:absolute;z-index:2;bottom:30px;left:7%;right:7%;display:flex;justify-content:space-between;color:#d0ded7;font-size:9px;letter-spacing:2px;text-transform:uppercase}
-.section{max-width:1120px;margin:auto;padding:105px 24px}
-.section-head{text-align:center;margin-bottom:45px}
-.label{font-size:10px;color:var(--green);letter-spacing:4px;text-transform:uppercase}
-h2{font:500 clamp(32px,5vw,52px) Manrope;letter-spacing:-.045em;margin:14px 0}
-.intro{color:var(--muted);font-size:14px;line-height:1.8;max-width:520px;margin:auto}
-.message-panel{max-width:760px;margin:auto;background:linear-gradient(145deg,#101a20,#080d12);border:1px solid var(--line);padding:30px}
-.message-panel h3{font:600 18px Manrope;margin:0 0 9px}
-.message-panel p{font-size:12px;color:var(--muted);line-height:1.7}
-textarea,input{width:100%;padding:15px;background:#050a0e;border:1px solid #ffffff25;color:white;outline:none;border-radius:2px;margin-top:10px}
-textarea{height:130px;resize:vertical}
-textarea:focus,input:focus{border-color:var(--green)}
-.fields{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.send-row{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-top:16px}
-.small{font-size:10px;color:#82928d;letter-spacing:1px}
-#status,#authStatus{font-size:12px;color:var(--green);min-height:18px}
-.feed{max-width:760px;margin:40px auto 0}
-.feed-head{display:flex;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:15px;font-size:11px;letter-spacing:2px;text-transform:uppercase}
-#count{color:var(--green)}
-.message{padding:23px;margin-bottom:12px;background:#0a1117;border:1px solid #ffffff15}
-.message p{font:400 15px/1.8 Manrope;overflow-wrap:anywhere}
-.meta{display:flex;justify-content:space-between;color:#91a39a;font-size:10px;text-transform:uppercase;letter-spacing:1px}
-.account-section{padding:110px 24px;background:linear-gradient(180deg,#050a0e,#0b1717 55%,#050a0e);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.account-box{max-width:500px;margin:40px auto 0;padding:35px;background:#08110f;border:1px solid #9af5c544;text-align:center}
-.account-box h3{font:600 23px Manrope;margin:0 0 10px}
-.account-box p{font-size:13px;color:var(--muted);line-height:1.7}
-.account-box input{margin:8px 0}
-.account-box button{width:100%;margin-top:12px}
-.secondary{background:transparent;color:var(--green);border:1px solid #9af5c566;padding:14px;cursor:pointer;font-size:10px;letter-spacing:1.5px;text-transform:uppercase}
-#authUser{color:var(--green);overflow-wrap:anywhere}
-.closing{text-align:center;padding:90px 20px;background:radial-gradient(ellipse at center,#10251e,#030609 70%)}
-.closing p{font:500 clamp(25px,4vw,40px) Manrope;max-width:700px;margin:0 auto 25px}
-.closing span{color:var(--green)}
-footer{padding:28px 7%;display:flex;justify-content:space-between;gap:20px;color:#80918a;font-size:9px;letter-spacing:1.5px}
-[hidden]{display:none!important}
-@media(max-width:700px){
- header{height:70px;padding:0 18px}
- .logo{font-size:9px;letter-spacing:1px}
- nav{gap:12px}nav a:first-child{display:none}
- .nav-button{padding:10px;font-size:9px}
- .hero{min-height:790px;background-position:56% center}
- .hero-content{padding-top:110px}
- h1{font-size:clamp(43px,12vw,65px)}
- .hero p{font-size:13px}
- .hero-bottom{left:18px;right:18px;font-size:8px;letter-spacing:1px}
- .section{padding:80px 18px}
- .message-panel{padding:20px}
- .fields{grid-template-columns:1fr;gap:0}
- .send-row{align-items:flex-start;flex-direction:column}
- .account-box{padding:25px 19px}
- footer{flex-direction:column;text-align:center;line-height:1.8}
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050914">
+  <meta name="description" content="One world. One humanity. Leave your message to the universe.">
+  <title>The Last Human Message</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #050914;
+      --panel: rgba(12, 21, 38, .82);
+      --panel2: rgba(18, 31, 51, .72);
+      --line: rgba(164, 195, 224, .14);
+      --text: #f3f7fc;
+      --muted: #91a2b8;
+      --green: #62e6bd;
+      --green2: #a0f5d9;
+      --danger: #ff8585;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: "DM Sans", sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    button, input, textarea, select { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .space-background {
+      position: fixed;
+      inset: 0;
+      z-index: -3;
+      background:
+        linear-gradient(180deg, rgba(3, 8, 18, .25), rgba(3, 8, 18, .9)),
+        url("https://images-assets.nasa.gov/image/iss072e030246/iss072e030246~large.jpg")
+        center center / cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .space-background::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 30%, transparent 0, rgba(4, 10, 22, .35) 55%, #050914 100%);
+    }
+
+    .stars {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      pointer-events: none;
+      opacity: .5;
+      background-image:
+        radial-gradient(1px 1px at 10% 20%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 70% 30%, #fff 50%, transparent 100%),
+        radial-gradient(2px 2px at 40% 75%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 85% 80%, #fff 50%, transparent 100%),
+        radial-gradient(1px 1px at 25% 55%, #fff 50%, transparent 100%);
+      background-size: 350px 350px;
+    }
+
+    .container {
+      width: min(1120px, calc(100% - 40px));
+      margin: auto;
+    }
+
+    header {
+      height: 82px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      color: white;
+      text-decoration: none;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: .5px;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(98,230,189,.55);
+      border-radius: 50%;
+      color: var(--green);
+      box-shadow: 0 0 22px rgba(98,230,189,.15);
+    }
+
+    .nav-link {
+      color: #d3deeb;
+      text-decoration: none;
+      font-size: 13px;
+      padding: 10px 15px;
+      border: 1px solid var(--line);
+      border-radius: 30px;
+      transition: .2s;
+    }
+
+    .nav-link:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    .hero {
+      min-height: 570px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 95px 0 85px;
+    }
+
+    .hero-content { max-width: 780px; }
+
+    .eyebrow {
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 25px;
+    }
+
+    h1, h2, h3 {
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    h1 {
+      font-size: clamp(42px, 8vw, 82px);
+      line-height: 1.04;
+      letter-spacing: -3px;
+      margin: 0;
+      text-shadow: 0 5px 45px rgba(0,0,0,.35);
+    }
+
+    h1 span {
+      color: var(--green);
+      display: block;
+    }
+
+    .hero-description {
+      max-width: 540px;
+      margin: 25px auto 32px;
+      color: #bdc9d8;
+      font-size: 16px;
+      line-height: 1.8;
+    }
+
+    .primary-button, .secondary-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 23px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      transition: .2s;
+    }
+
+    .primary-button {
+      color: #04120f;
+      background: var(--green);
+      border: 1px solid var(--green);
+      box-shadow: 0 0 28px rgba(98,230,189,.17);
+    }
+
+    .primary-button:hover {
+      background: var(--green2);
+      transform: translateY(-2px);
+    }
+
+    .secondary-button {
+      color: white;
+      background: rgba(255,255,255,.04);
+      border: 1px solid var(--line);
+    }
+
+    .secondary-button:hover { border-color: var(--green); }
+
+    .section {
+      padding: 55px 0 75px;
+      scroll-margin-top: 25px;
+    }
+
+    .section-heading {
+      text-align: center;
+      margin-bottom: 34px;
+    }
+
+    .section-heading h2 {
+      font-size: clamp(28px, 5vw, 42px);
+      margin: 0 0 10px;
+      letter-spacing: -1px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 20px 80px rgba(0,0,0,.2);
+    }
+
+    .message-layout {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .wall-panel { padding: 25px; }
+
+    .panel-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .panel-top h3 {
+      font-size: 17px;
+      margin: 0;
+    }
+
+    .live-label {
+      color: var(--green);
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      font-weight: 700;
+    }
+
+    .message-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .message-card {
+      padding: 17px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 15px;
+      animation: appear .35s ease;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(7px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .message-author {
+      color: var(--green2);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .message-date {
+      color: #71839a;
+      font-size: 10px;
+    }
+
+    .message-country {
+      color: #9aabc0;
+      font-size: 11px;
+      margin-bottom: 9px;
+    }
+
+    .message-content {
+      color: #e7edf5;
+      font-size: 13px;
+      line-height: 1.7;
+      overflow-wrap: anywhere;
+      white-space: pre-wrap;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 45px 15px;
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .side-column {
+      display: grid;
+      gap: 18px;
+    }
+
+    .composer, .account-panel { padding: 23px; }
+
+    .composer h3, .account-panel h3 {
+      font-size: 18px;
+      margin: 0 0 8px;
+    }
+
+    .subtext {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 0 0 20px;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      color: white;
+      background: rgba(2,8,18,.55);
+      border: 1px solid rgba(173,199,226,.17);
+      border-radius: 11px;
+      padding: 13px 14px;
+      outline: none;
+      transition: .2s;
+    }
+
+    textarea:focus, input:focus, select:focus {
+      border-color: rgba(98,230,189,.7);
+      box-shadow: 0 0 0 3px rgba(98,230,189,.08);
+    }
+
+    textarea {
+      min-height: 125px;
+      resize: vertical;
+      line-height: 1.6;
+      font-size: 13px;
+    }
+
+    input { font-size: 13px; }
+
+    select { font-size: 13px; }
+
+    select option {
+      color: white;
+      background: #101b2c;
+    }
+
+    .field { margin-bottom: 12px; }
+
+    .field label {
+      display: block;
+      color: #aebed0;
+      font-size: 11px;
+      margin: 0 0 7px 2px;
+    }
+
+    .char-count {
+      color: #74869b;
+      text-align: right;
+      font-size: 10px;
+      margin: 7px 2px 14px;
+    }
+
+    .full-button {
+      width: 100%;
+      min-height: 46px;
+      border: 0;
+      border-radius: 11px;
+      color: #04120f;
+      background: var(--green);
+      font-weight: 700;
+      font-size: 13px;
+      transition: .2s;
+    }
+
+    .full-button:hover { background: var(--green2); }
+
+    .full-button:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    .status {
+      min-height: 18px;
+      margin-top: 12px;
+      color: var(--green);
+      font-size: 11px;
+      line-height: 1.5;
+    }
+
+    .status.error { color: var(--danger); }
+
+    .tabs {
+      display: flex;
+      gap: 7px;
+      padding: 4px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      margin: 18px 0;
+    }
+
+    .tab {
+      flex: 1;
+      min-height: 38px;
+      color: #9aabc0;
+      background: transparent;
+      border: 0;
+      border-radius: 9px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .tab.active {
+      color: var(--green);
+      background: rgba(98,230,189,.1);
+    }
+
+    .hidden { display: none !important; }
+
+    .profile-card {
+      padding: 17px;
+      border: 1px solid rgba(98,230,189,.2);
+      background: rgba(98,230,189,.055);
+      border-radius: 15px;
+      margin: 17px 0;
+    }
+
+    .profile-avatar {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      color: #04120f;
+      background: var(--green);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 13px;
+    }
+
+    .profile-name {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .profile-detail {
+      color: #a5b5c8;
+      font-size: 11px;
+      margin-top: 6px;
+      overflow-wrap: anywhere;
+    }
+
+    .text-button {
+      color: #a9b9cb;
+      background: transparent;
+      border: 0;
+      padding: 10px 0 0;
+      font-size: 11px;
+      text-decoration: underline;
+    }
+
+    .account-note {
+      color: #8193a9;
+      font-size: 10px;
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--line);
+      margin: 18px 0;
+    }
+
+    footer {
+      border-top: 1px solid rgba(255,255,255,.08);
+      padding: 30px 0 38px;
+      text-align: center;
+      color: #71839a;
+      font-size: 11px;
+      line-height: 1.8;
+    }
+
+    footer strong {
+      display: block;
+      color: #c5d1df;
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 12px;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 850px) {
+      .message-layout { grid-template-columns: 1fr; }
+      .side-column { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 600px) {
+      .container { width: min(100% - 28px, 1120px); }
+      header { height: 70px; }
+      .brand { font-size: 12px; }
+      .brand-mark { width: 30px; height: 30px; }
+      .nav-link { font-size: 11px; padding: 9px 12px; }
+      .hero { min-height: 510px; padding: 75px 0; }
+      h1 { letter-spacing: -2px; }
+      .hero-description { font-size: 14px; }
+      .section { padding: 40px 0 55px; }
+      .wall-panel { padding: 16px; }
+      .side-column { grid-template-columns: 1fr; }
+      .composer, .account-panel { padding: 19px; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="space-background"></div>
+  <div class="stars"></div>
 
-<header>
- <a class="logo" href="#"><i></i> THE LAST HUMAN MESSAGE</a>
- <nav>
-  <a href="#wall">The Wall</a>
-  <a href="#account" class="nav-button">Sign in / Join</a>
- </nav>
-</header>
+  <header class="container">
+    <a class="brand" href="#">
+      <span class="brand-mark">✦</span>
+      <span>THE LAST HUMAN MESSAGE</span>
+    </a>
+    <a class="nav-link" href="#account">Your account ↗</a>
+  </header>
 
-<main>
-<section class="hero">
- <div class="hero-content">
-  <div class="eyebrow">One planet. One humanity.</div>
-  <h1>The Last <span>Human Message</span></h1>
-  <p>If humanity could leave one message behind, what would you want the universe to remember?</p>
-  <div class="actions">
-   <button class="btn" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Leave your message ↗</button>
-   <button class="btn btn-outline" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Explore the wall ↓</button>
-  </div>
- </div>
- <div class="hero-bottom">
-  <span><b id="count">0</b> messages left</span>
-  <span>A voice from Earth</span>
- </div>
-</section>
+  <main>
+    <section class="hero container">
+      <div class="hero-content">
+        <div class="eyebrow">ONE PLANET · ONE HUMANITY</div>
+        <h1>The Last Human <span>Message.</span></h1>
+        <p class="hero-description">
+          Imagine the world goes silent.
+          What would you want the universe to remember about humanity?
+          Leave your words among the stars.
+        </p>
+        <a class="primary-button" href="#wall">Leave your message&nbsp; ↗</a>
+      </div>
+    </section>
 
-<section class="section" id="wall">
- <div class="section-head">
-  <div class="label">The human archive</div>
-  <h2>Words that outlive us.</h2>
-  <p class="intro">Every human has something worth leaving behind. A memory, a truth, a message to the future.</p>
- </div>
+    <section class="section container" id="wall">
+      <div class="section-heading">
+        <div class="eyebrow">A MESSAGE THROUGH TIME</div>
+        <h2>The Human Message Wall</h2>
+        <p>Every message is a small piece of our shared story.</p>
+      </div>
 
- <div class="message-panel">
-  <h3>Leave a message for humanity.</h3>
-  <p>Write something you wish the world would never forget.</p>
-  <form id="messageForm">
-   <textarea id="content" maxlength="200" placeholder="If the world could hear one thing from you..." required></textarea>
-   <div class="fields">
-    <input id="name" maxlength="24" placeholder="Your name (optional)">
-    <input id="country" maxlength="60" placeholder="Your country (optional)">
-   </div>
-   <div class="send-row">
-    <span class="small">UP TO 200 CHARACTERS</span>
-    <button class="btn" id="sendButton" type="submit">Publish message ↗</button>
-   </div>
-   <div id="status"></div>
-  </form>
- </div>
+      <div class="message-layout">
+        <div class="panel wall-panel">
+          <div class="panel-top">
+            <h3>Messages from humanity</h3>
+            <span class="live-label">● LIVE WALL</span>
+          </div>
+          <div class="message-list" id="messageList">
+            <div class="empty-state">Loading messages from across the world...</div>
+          </div>
+          <div class="status" id="wallStatus"></div>
+        </div>
 
- <div class="feed">
-  <div class="feed-head"><span>Messages from Earth</span><span>LIVE ARCHIVE</span></div>
-  <div id="messages"></div>
- </div>
-</section>
+        <div class="side-column">
+          <div class="panel composer">
+            <h3>Leave your message</h3>
+            <p class="subtext">
+              Your name and country come from your account.
+              You only need to write your message.
+            </p>
 
-<section class="account-section" id="account">
- <div class="section-head">
-  <div class="label">Your identity</div>
-  <h2>Become part of the story.</h2>
-  <p class="intro">Create your account or sign in to return to your place in the human archive.</p>
- </div>
- <div class="account-box">
-  <h3>Welcome to humanity.</h3>
-  <p id="authUser">You are currently browsing anonymously.</p>
-  <input id="email" type="email" autocomplete="email" placeholder="Email address">
-  <input id="password" type="password" autocomplete="current-password" minlength="6" placeholder="Password">
-  <button class="btn" id="signIn" type="button">Sign in to your account</button>
-  <button class="secondary" id="signUp" type="button">Create a new account</button>
-  <button class="secondary" id="signOut" type="button" hidden>Sign out</button>
-  <div id="authStatus"></div>
- </div>
-</section>
+            <div id="loggedOutMessage">
+              <p class="subtext">Sign in or create an account to leave your message on the wall.</p>
+              <a class="primary-button" href="#account">Go to your account ↗</a>
+            </div>
 
-<section class="closing">
- <p>We are temporary. <span>What we leave behind can remain.</span></p>
- <button class="btn" onclick="document.getElementById('wall').scrollIntoView({behavior:'smooth'})">Leave your message ↗</button>
-</section>
-</main>
+            <form id="messageForm" class="hidden">
+              <textarea id="messageInput" maxlength="200" placeholder="If the universe could hear one thing from you..." required></textarea>
+              <div class="char-count"><span id="charCount">0</span> / 200</div>
+              <button class="full-button" id="publishButton" type="submit">Publish your message ↗</button>
+              <div class="status" id="messageStatus"></div>
+            </form>
+          </div>
 
-<footer>
- <span>© THE LAST HUMAN MESSAGE</span>
- <span>ONE WORLD. BILLIONS OF STORIES.</span>
-</footer>
+          <div class="panel account-panel" id="account">
+            <div class="eyebrow">YOUR PLACE IN HUMANITY</div>
+            <h3>Your account</h3>
+            <p class="subtext">Become part of the story.</p>
 
-<script type="module">
-import {createClient} from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-const supabase=createClient('https://vkzhlrtcyglkqmseuvkv.supabase.co','sb_publishable_z2Ua_8qQw_BXAkB7cp7eow_TS7Mlbt9');
-const $=id=>document.getElementById(id);
+            <div id="authArea">
+              <div class="tabs">
+                <button class="tab active" id="signInTab" type="button">Sign in</button>
+                <button class="tab" id="signUpTab" type="button">Create account</button>
+              </div>
 
-async function refreshAuth(){
- const {data:{user}}=await supabase.auth.getUser();
- $('authUser').textContent=user?user.email:'You are currently browsing anonymously.';
- $('signOut').hidden=!user;
- $('signIn').hidden=!!user;
- $('signUp').hidden=!!user;
-}
-$('signIn').onclick=async()=>{
- $('authStatus').textContent='Signing in...';
- const {error}=await supabase.auth.signInWithPassword({email:$('email').value.trim(),password:$('password').value});
- $('authStatus').textContent=error?error.message:'Welcome back.';
- await refreshAuth();
-};
-$('signUp').onclick=async()=>{
- $('authStatus').textContent='Creating account...';
- const {data,error}=await supabase.auth.signUp({email:$('email').value.trim(),password:$('password').value});
- $('authStatus').textContent=error?error.message:(data.session?'Your account is ready.':'Check your inbox to confirm your email.');
- await refreshAuth();
-};
-$('signOut').onclick=async()=>{
- const {error}=await supabase.auth.signOut();
- $('authStatus').textContent=error?error.message:'You are signed out.';
- await refreshAuth();
-};
-supabase.auth.onAuthStateChange(()=>refreshAuth());
-await refreshAuth();
+              <form id="signInForm">
+                <div class="field">
+                  <label for="loginEmail">Email address</label>
+                  <input id="loginEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                  <label for="loginPassword">Password</label>
+                  <input id="loginPassword" type="password" autocomplete="current-password" placeholder="Your password" required>
+                </div>
+                <button class="full-button" type="submit" id="loginButton">Sign in</button>
+              </form>
 
-async function loadMessages(){
- const {data,error}=await supabase.from('messages').select('id,content,display_name,country,created_at').order('created_at',{ascending:false}).limit(100);
- if(error){$('status').textContent='Messages could not be loaded.';return;}
- $('messages').replaceChildren();
- $('count').textContent=data.length.toLocaleString();
- if(!data.length){
-  const empty=document.createElement('p');
-  empty.textContent='The archive is waiting for its first message.';
-  empty.className='intro';
-  $('messages').append(empty);
-  return;
- }
- data.forEach(m=>{
-  const card=document.createElement('article');card.className='message';
-  const p=document.createElement('p');p.textContent=m.content;
-  const meta=document.createElement('div');meta.className='meta';
-  const author=document.createElement('span');author.textContent=m.display_name||'Anonymous';
-  const country=document.createElement('span');country.textContent=m.country||'Earth';
-  meta.append(author,country);card.append(p,meta);$('messages').append(card);
- });
-}
-$('messageForm').addEventListener('submit',async e=>{
- e.preventDefault();
- const content=$('content').value.trim();
- if(!content||content.length>200)return;
- $('sendButton').disabled=true;
- $('status').textContent='Sending your message...';
- const {error}=await supabase.from('messages').insert({
-  content,
-  display_name:$('name').value.trim()||'Anonymous',
-  country:$('country').value.trim()||'Earth'
- });
- $('sendButton').disabled=false;
- if(error){$('status').textContent='Could not send your message. Please try again.';return;}
- $('messageForm').reset();
- $('status').textContent='Your message has reached humanity.';
- await loadMessages();
-});
-await loadMessages();
-supabase.channel('public-messages').on('postgres_changes',{event:'*',schema:'public',table:'messages'},loadMessages).subscribe();
-</script>
+              <form id="signUpForm" class="hidden">
+                <div class="field">
+                  <label for="firstName">First name</label>
+                  <input id="firstName" maxlength="24" autocomplete="given-name" placeholder="First name" required>
+                </div>
+                <div class="field">
+                  <label for="lastName">Last name</label>
+                  <input id="lastName" maxlength="24" autocomplete="family-name" placeholder="Last name" required>
+                </div>
+                <div class="field">
+                  <label for="countrySelect">Your country</label>
+                  <select id="countrySelect" required>
+                    <option value="">Select your country</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label for="signupEmail">Email address</label>
+                  <input id="signupEmail" type="email" autocomplete="email" placeholder="you@example.com" required>
+                </div>
+                <div class="field">
+                  <label for="signupPassword">Create password</label>
+                  <input id="signupPassword" type="password" minlength="6" autocomplete="new-password" placeholder="At least 6 characters" required>
+                </div>
+                <button class="full-button" type="submit" id="signupButton">Create my account</button>
+              </form>
+
+              <div class="status" id="authStatus"></div>
+              <p class="account-note">
+                Your name and country are saved to your account.
+                You won't need to enter them again when posting.
+              </p>
+            </div>
+
+            <div id="profileArea" class="hidden">
+              <div class="profile-card">
+                <div class="profile-avatar" id="profileAvatar">H</div>
+                <div class="profile-name" id="profileName"></div>
+                <div class="profile-detail" id="profileCountry"></div>
+                <div class="profile-detail" id="profileEmail"></div>
+              </div>
+              <div class="status" id="profileStatus"></div>
+              <button class="text-button" id="signOutButton" type="button">Sign out</button>
+            </div>
+
+            <form id="completeProfileForm" class="hidden">
+              <p class="subtext">Complete your profile once to continue.</p>
+              <div class="field">
+                <label for="completeFirstName">First name</label>
+                <input id="completeFirstName" maxlength="24" required>
+              </div>
+              <div class="field">
+                <label for="completeLastName">Last name</label>
+                <input id="completeLastName" maxlength="24" required>
+              </div>
+              <div class="field">
+                <label for="completeCountry">Your country</label>
+                <select id="completeCountry" required>
+                  <option value="">Select your country</option>
+                </select>
+              </div>
+              <button class="full-button" type="submit" id="saveProfileButton">Save my profile</button>
+              <div class="status" id="completeProfileStatus"></div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <strong>THE LAST HUMAN MESSAGE</strong>
+    One world. One humanity. One message to the universe.
+    <br>Made for the story we leave behind.
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    // Your existing Supabase project connection
+    const SUPABASE_URL = "https://vkzhlrtcyglkqmseuvkv.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_z2Ua_8qQw_BXAkB7cp7eow_TS7Mlbt9";
+
+    const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const $ = (id) => document.getElementById(id);
+
+    let currentUser = null;
+    let currentProfile = null;
+    let profileRequestNumber = 0;
+
+    function setStatus(id, message, isError = false) {
+      const el = $(id);
+      if (!el) return;
+      el.textContent = message || "";
+      el.classList.toggle("error", Boolean(isError));
+    }
+
+    function escapeHTML(value) {
+      return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function flagEmoji(code) {
+      if (!code || code.length !== 2) return "🌍";
+      return [...code.toUpperCase()]
+        .map(char => String.fromCodePoint(char.charCodeAt(0) + 127397))
+        .join("");
+    }
+
+    // ISO country codes used to populate the country selectors.
+    const countryCodes = `
+      AD AE AF AG AI AL AM AO AQ AR AS AT AU AW AX AZ
+      BA BB BD BE BF BG BH BI BJ BL BM BN BO BQ BR BS BT BV BW BY BZ
+      CA CC CD CF CG CH CI CK CL CM CN CO CR CU CV CW CX CY CZ
+      DE DJ DK DM DO DZ
+      EC EE EG EH ER ES ET
+      FI FJ FK FM FO FR
+      GA GB GD GE GF GG GH GI GL GM GN GP GQ GR GS GT GU GW GY
+      HK HM HN HR HT HU
+      ID IE IL IM IN IO IQ IR IS IT
+      JE JM JO JP
+      KE KG KH KI KM KN KP KR KW KY KZ
+      LA LB LC LI LK LR LS LT LU LV LY
+      MA MC MD ME MF MG MH MK ML MM MN MO MP MQ MR MS MT MU MV MW MX MY MZ
+      NA NC NE NF NG NI NL NO NP NR NU NZ
+      OM
+      PA PE PF PG PH PK PL PM PN PR PS PT PW PY
+      QA
+      RE RO RS RU RW
+      SA SB SC SD SE SG SH SI SJ SK SL SM SN SO SR SS ST SV SX SY SZ
+      TC TD TF TG TH TJ TK TL TM TN TO TR TT TV TW TZ
+      UA UG UM US UY UZ
+      VA VC VE VG VI VN VU
+      WF WS
+      XK YE YT
+      ZA ZM ZW
+    `.trim().split(/\s+/);
+
+    const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
+
+    function populateCountries(selectId) {
+      const select = $(selectId);
+      if (!select) return;
+
+      const countries = countryCodes.map(code => ({
+        code,
+        name: code === "XK" ? "Kosovo" : regionNames.of(code)
+      }))
+      .filter(item => item.name && item.name !== item.code)
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+      countries.forEach(country => {
+        const option = document.createElement("option");
+        option.value = country.code;
+        option.textContent = `${flagEmoji(country.code)} ${country.name}`;
+        option.dataset.name = country.name;
+        select.appendChild(option);
+      });
+
+      if (selectId === "countrySelect") select.value = "TR";
+    }
+
+    function selectedCountry(selectId) {
+      const select = $(selectId);
+      const option = select?.selectedOptions?.[0];
+
+      if (!select || !select.value || !option) return null;
+
+      return {
+        code: select.value,
+        name: option.dataset.name || regionNames.of(select.value)
+      };
+    }
+
+    function showAuth() {
+      $("authArea").classList.remove("hidden");
+      $("profileArea").classList.add("hidden");
+      $("completeProfileForm").classList.add("hidden");
+      $("loggedOutMessage").classList.remove("hidden");
+      $("messageForm").classList.add("hidden");
+    }
+
+    function showProfile(profile, user) {
+      $("authArea").classList.add("hidden");
+      $("completeProfileForm").classList.add("hidden");
+      $("profileArea").classList.remove("hidden");
+
+      $("profileName").textContent =
+        `${profile.first_name} ${profile.last_name}`;
+
+      $("profileCountry").textContent =
+        `${flagEmoji(profile.country_code)} ${profile.country_name}`;
+
+      $("profileEmail").textContent = user.email || "";
+
+      const initials =
+        `${profile.first_name.charAt(0)}${profile.last_name.charAt(0)}`.toUpperCase();
+
+      $("profileAvatar").textContent = initials;
+      $("loggedOutMessage").classList.add("hidden");
+      $("messageForm").classList.remove("hidden");
+    }
+
+    function showProfileCompletion(user, metadata = {}) {
+      $("authArea").classList.add("hidden");
+      $("profileArea").classList.add("hidden");
+      $("completeProfileForm").classList.remove("hidden");
+      $("loggedOutMessage").classList.add("hidden");
+      $("messageForm").classList.add("hidden");
+
+      $("completeFirstName").value = metadata.first_name || "";
+      $("completeLastName").value = metadata.last_name || "";
+
+      if (metadata.country_code) {
+        $("completeCountry").value = metadata.country_code;
+      }
+    }
+
+    async function saveProfile(user, profileData) {
+      const row = {
+        id: user.id,
+        first_name: profileData.first_name.trim(),
+        last_name: profileData.last_name.trim(),
+        country_code: profileData.country_code,
+        country_name: profileData.country_name
+      };
+
+      const { data, error } = await db
+        .from("profiles")
+        .upsert(row, { onConflict: "id" })
+        .select()
+        .single();
+
+      if (error) throw error;
+      return data;
+    }
+
+    async function loadProfile(user) {
+      const requestNumber = ++profileRequestNumber;
+      currentProfile = null;
+
+      const { data, error } = await db
+        .from("profiles")
+        .select("id, first_name, last_name, country_code, country_name")
+        .eq("id", user.id)
+        .maybeSingle();
+
+      if (requestNumber !== profileRequestNumber || currentUser?.id !== user.id) return;
+
+      if (error) {
+        showProfileCompletion(user, user.user_metadata || {});
+        setStatus(
+          "completeProfileStatus",
+          "We couldn't load your profile. Please complete it again.",
+          true
+        );
+        return;
+      }
+
+      if (data && data.first_name && data.last_name && data.country_code && data.country_name) {
+        currentProfile = data;
+        showProfile(data, user);
+        return;
+      }
+
+      // If the profile row is missing, use the information saved at signup.
+      const metadata = user.user_metadata || {};
+
+      if (metadata.first_name && metadata.last_name &&
+          metadata.country_code && metadata.country_name) {
+        try {
+          const saved = await saveProfile(user, metadata);
+
+          if (requestNumber !== profileRequestNumber || currentUser?.id !== user.id) return;
+
+          currentProfile = saved;
+          showProfile(saved, user);
+          return;
+        } catch (saveError) {
+          console.error("Profile save error:", saveError);
+        }
+      }
+
+      showProfileCompletion(user, metadata);
+    }
+
+    async function handleSession(session) {
+      const user = session?.user || null;
+      currentUser = user;
+      currentProfile = null;
+
+      if (!user) {
+        profileRequestNumber++;
+        showAuth();
+        return;
+      }
+
+      $("authArea").classList.add("hidden");
+      $("profileArea").classList.add("hidden");
+      $("completeProfileForm").classList.add("hidden");
+      $("loggedOutMessage").classList.add("hidden");
+      $("messageForm").classList.add("hidden");
+
+      await loadProfile(user);
+    }
+
+    // Account tabs
+    $("signInTab").addEventListener("click", () => {
+      $("signInTab").classList.add("active");
+      $("signUpTab").classList.remove("active");
+      $("signInForm").classList.remove("hidden");
+      $("signUpForm").classList.add("hidden");
+      setStatus("authStatus", "");
+    });
+
+    $("signUpTab").addEventListener("click", () => {
+      $("signUpTab").classList.add("active");
+      $("signInTab").classList.remove("active");
+      $("signUpForm").classList.remove("hidden");
+      $("signInForm").classList.add("hidden");
+      setStatus("authStatus", "");
+    });
+
+    // Sign in
+    $("signInForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("loginButton");
+      button.disabled = true;
+      button.textContent = "Signing in...";
+
+      setStatus("authStatus", "");
+
+      const { error } = await db.auth.signInWithPassword({
+        email: $("loginEmail").value.trim(),
+        password: $("loginPassword").value
+      });
+
+      button.disabled = false;
+      button.textContent = "Sign in";
+
+      if (error) {
+        setStatus("authStatus", error.message, true);
+      }
+    });
+
+    // Create account and save profile details in signup metadata.
+    $("signUpForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      const button = $("signupButton");
+      const country = selectedCountry("countrySelect");
+
+      if (!country) {
+        setStatus("authStatus", "Please select your country.", true);
+        return;
+      }
+
+      const firstName = $("firstName").value.trim();
+      const lastName = $("lastName").value.trim();
+
+      if (!firstName || !lastName) {
+        setStatus("authStatus", "Please enter your first and last name.", true);
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Creating account...";
+      setStatus("authStatus", "");
+
+      const profileMetadata = {
+        first_name: firstName,
+        last_name: lastName,
+        country_code: country.code,
+        country_name: country.name
+      };
+
+      const { data, error } = await db.auth.signUp({
+        email: $("signupEmail").value.trim(),
+        password: $("signupPassword").value,
+        options: {
+          data: profileMetadata
+        }
+      });
+
+      button.disabled = false;
+      button.textContent = "Create my account";
+
+      if (error) {
+        setStatus("authStatus", error.message, true);
+        return;
+      }
+
+      if (data.session && data.user) {
+        try {
+          const profile = await saveProfile(data.user, profileMetadata);
+          currentUser = data.user;
+          currentProfile = profile;
+          showProfile(profile, data.user);
+          setStatus("profileStatus", "Your account is ready.");
+          $("signUpForm").reset();
+        } catch (saveError) {
+          console.error(saveError);
+          setStatus(
+            "authStatus",
+            "Your account was created, but your profile could not be saved. Please sign in and complete your profile.",
+            true
+          );
+        }
+      } else {
+        setStatus(
+          "authStatus",
+          "Your account has been created. Please check your email to confirm your account, then sign in."
+        );
+      }
+    });
+
+    // Complete a missing profile after login.
+    $("completeProfileForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser) return;
+
+      const country = selectedCountry("completeCountry");
+
+      if (!country) {
+        setStatus("completeProfileStatus", "Please select your country.", true);
+        return;
+      }
+
+      const button = $("saveProfileButton");
+      button.disabled = true;
+      button.textContent = "Saving...";
+
+      try {
+        const profile = await saveProfile(currentUser, {
+          first_name: $("completeFirstName").value,
+          last_name: $("completeLastName").value,
+          country_code: country.code,
+          country_name: country.name
+        });
+
+        currentProfile = profile;
+        showProfile(profile, currentUser);
+        setStatus("profileStatus", "Your profile has been saved.");
+      } catch (error) {
+        setStatus("completeProfileStatus", error.message, true);
+      } finally {
+        button.disabled = false;
+        button.textContent = "Save my profile";
+      }
+    });
+
+    // Sign out
+    $("signOutButton").addEventListener("click", async () => {
+      const { error } = await db.auth.signOut();
+      if (error) setStatus("profileStatus", error.message, true);
+    });
+
+    // Character counter
+    $("messageInput").addEventListener("input", () => {
+      $("charCount").textContent = $("messageInput").value.length;
+    });
+
+    // Publish a message using the saved profile.
+    $("messageForm").addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!currentUser || !currentProfile) {
+        setStatus("messageStatus", "Please sign in and complete your profile first.", true);
+        return;
+      }
+
+      const content = $("messageInput").value.trim();
+
+      if (!content) {
+        setStatus("messageStatus", "Write your message first.", true);
+        return;
+      }
+
+      const displayName =
+        `${currentProfile.first_name} ${currentProfile.last_name}`.trim().slice(0, 24);
+
+      const country =
+        `${flagEmoji(currentProfile.country_code)} ${currentProfile.country_name}`.slice(0, 60);
+
+      const button = $("publishButton");
+      button.disabled = true;
+      button.textContent = "Publishing...";
+
+      const { error } = await db
+        .from("messages")
+        .insert({
+          content,
+          display_name: displayName,
+          country
+        });
+
+      button.disabled = false;
+      button.textContent = "Publish your message ↗";
+
+      if (error) {
+        setStatus("messageStatus", error.message, true);
+        return;
+      }
+
+      $("messageInput").value = "";
+      $("charCount").textContent = "0";
+      setStatus("messageStatus", "Your message has been sent to the wall.");
+      await loadMessages();
+    });
+
+    function formatDate(value) {
+      if (!value) return "";
+      const date = new Date(value);
+      return date.toLocaleDateString("en", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+      });
+    }
+
+    function renderMessages(messages) {
+      const list = $("messageList");
+
+      if (!messages || messages.length === 0) {
+        list.innerHTML = `
+          <div class="empty-state">
+            The wall is waiting for its first messages.<br>
+            Be the first voice among the stars.
+          </div>
+        `;
+        return;
+      }
+
+      list.innerHTML = messages.map(message => `
+        <article class="message-card">
+          <div class="message-meta">
+            <span class="message-author">${escapeHTML(message.display_name || "A human")}</span>
+            <span class="message-date">${escapeHTML(formatDate(message.created_at))}</span>
+          </div>
+          <div class="message-country">${escapeHTML(message.country || "🌍 Earth")}</div>
+          <div class="message-content">${escapeHTML(message.content)}</div>
+        </article>
+      `).join("");
+    }
+
+    async function loadMessages() {
+      const { data, error } = await db
+        .from("messages")
+        .select("id, content, display_name, country, created_at")
+        .order("created_at", { ascending: false })
+        .limit(50);
+
+      if (error) {
+        $("messageList").innerHTML = `
+          <div class="empty-state">Messages couldn't be loaded right now. Please refresh the page.</div>
+        `;
+        console.error("Messages error:", error);
+        return;
+      }
+
+      renderMessages(data || []);
+    }
+
+    // Start the page
+    populateCountries("countrySelect");
+    populateCountries("completeCountry");
+
+    db.auth.onAuthStateChange((_event, session) => {
+      // Defer async profile loading until after the auth callback completes.
+      setTimeout(() => handleSession(session), 0);
+    });
+
+    loadMessages();
+
+    // Live updates when a new message is published.
+    db.channel("public-message-wall")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages" },
+        () => loadMessages()
+      )
+      .subscribe();
+
+    // Restore the current login state.
+    db.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        console.error(error);
+        return;
+      }
+      handleSession(data.session);
+    });
+  </script>
 </body>
 </html>
+
+
