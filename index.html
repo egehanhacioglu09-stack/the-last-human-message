@@ -578,6 +578,49 @@
       .side-column { grid-template-columns: 1fr; }
       .composer, .account-panel { padding: 19px; }
     }
+    .my-activity {
+  margin-top: 24px;
+  padding: 20px;
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 16px;
+  background: rgba(255,255,255,.035);
+}
+
+.my-activity h3 {
+  color: #e7edf5;
+  font-size: 17px;
+  margin: 0 0 18px;
+}
+
+.activity-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.activity-stat {
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.05);
+}
+
+.activity-stat strong {
+  display: block;
+  color: #35e0ad;
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.activity-stat span {
+  color: #9aa8ba;
+  font-size: 12px;
+}
+
+.account-note {
+  color: #8996a8;
+  font-size: 13px;
+}
   </style>
 </head>
 
@@ -710,6 +753,25 @@
                 <div class="profile-detail" id="profileCountry"></div>
                 <div class="profile-detail" id="profileEmail"></div>
               </div>
+              <div class="my-activity">
+  <h3>My Activity</h3>
+
+  <div class="activity-stats">
+    <div class="activity-stat">
+      <strong id="myMessageCount">0</strong>
+      <span>Messages</span>
+    </div>
+
+    <div class="activity-stat">
+      <strong id="myLikeCount">0</strong>
+      <span>Total likes</span>
+    </div>
+  </div>
+
+  <div id="myMessages">
+    <p class="account-note">Your messages will appear here.</p>
+  </div>
+</div>
               <div class="status" id="profileStatus"></div>
               <button class="text-button" id="signOutButton" type="button">Sign out</button>
             </div>
