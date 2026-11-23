@@ -1230,10 +1230,11 @@
       const { error } = await db
         .from("messages")
         .insert({
-          content,
-          display_name: displayName,
-          country
-        });
+  content,
+  display_name: displayName,
+  country,
+  user_id: currentUser.id
+});
 
       button.disabled = false;
       button.textContent = "Publish your message ↗";
