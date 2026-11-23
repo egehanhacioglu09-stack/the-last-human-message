@@ -1235,7 +1235,7 @@
       `).join("");
     }
 
-      async function loadMessages() {
+async function loadMessages() {
   const { data, error } = await db
     .from("messages")
     .select("id, content, display_name, country, created_at, likes")
@@ -1244,7 +1244,9 @@
 
   if (error) {
     $("messageList").innerHTML = `
-      <div class="empty-state">Messages couldn't be loaded right now. Please refresh the page.</div>
+      <div class="empty-state">
+        Messages couldn't be loaded right now. Please refresh the page.
+      </div>
     `;
     console.error("Messages error:", error);
     return;
@@ -1274,6 +1276,7 @@
 
   renderMessages(messages);
 }
+
 $("messageList").addEventListener("click", async (event) => {
   const button = event.target.closest("[data-like-button]");
   if (!button) return;
@@ -1308,9 +1311,7 @@ $("messageList").addEventListener("click", async (event) => {
 
   await loadMessages();
 });
-
-      renderMessages(data || []);
-    }
+    
 
     // Start the page
     populateCountries("countrySelect");
